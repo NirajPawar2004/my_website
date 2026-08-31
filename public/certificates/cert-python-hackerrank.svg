@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="550" rx="20" fill="url(#bgGrad4)"/>
+  <rect x="25" y="25" width="750" height="500" rx="12" fill="none" stroke="url(#greenGrad)" stroke-width="3"/>
+
+  <text x="400" y="90" font-family="'Inter', sans-serif" font-size="26" font-weight="bold" fill="#10b981" text-anchor="middle" letter-spacing="3">HACKERRANK</text>
+  <text x="400" y="115" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">VERIFIED SKILL CERTIFICATE</text>
+
+  <text x="400" y="175" font-family="'Inter', sans-serif" font-size="13" fill="#cbd5e1" text-anchor="middle" letter-spacing="3">THIS CERTIFIES THAT</text>
+  <text x="400" y="225" font-family="'Georgia', serif" font-size="36" font-weight="bold" fill="#ffffff" text-anchor="middle">NIRAJ PAWAR</text>
+  
+  <text x="400" y="270" font-family="'Inter', sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">has successfully cleared the technical skill assessment for</text>
+  <text x="400" y="310" font-family="'Inter', sans-serif" font-size="24" font-weight="bold" fill="url(#greenGrad)" text-anchor="middle">Python (Basic) Certification</text>
+
+  <rect x="200" y="345" width="400" height="45" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="400" y="372" font-family="monospace" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">Credential ID: 3C0A265FA1C7</text>
+
+  <text x="400" y="445" font-family="sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">Issued: June 2024 • HackerRank Verified</text>
+</svg>

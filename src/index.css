@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #ffffff;
+    --color-text-primary: #0f172a;
+    --color-border: #e2e8f0;
+  }
+
+  .dark {
+    --color-bg-primary: #090d16;
+    --color-text-primary: #f8fafc;
+    --color-border: #1e293b;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100 transition-colors duration-300 antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white;
+  }
+}
+
+@layer utilities {
+  /* Custom Glassmorphism */
+  .glass-card {
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xl shadow-slate-200/20 dark:shadow-none;
+  }
+
+  .glass-card-hover {
+    @apply transition-all duration-300 hover:border-brand-500/50 hover:shadow-2xl hover:shadow-brand-500/10 dark:hover:shadow-brand-500/5 hover:-translate-y-1;
+  }
+
+  .glass-nav {
+    @apply bg-white/80 dark:bg-[#090d16]/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-accent-cyan to-accent-indigo dark:from-brand-400 dark:via-accent-cyan dark:to-accent-purple;
+  }
+
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-orange-500 to-amber-300;
+  }
+
+  .glow-box {
+    box-shadow: 0 0 25px -5px rgba(12, 142, 233, 0.25);
+  }
+
+  .glow-box-dark {
+    box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.2);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full hover:bg-brand-500 transition-colors;
+  }
+}
+
+/* Reduced Motion Compliance */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
