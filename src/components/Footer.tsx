@@ -8,19 +8,24 @@ export const Footer: React.FC = () => {
 
   useEffect(() => {
     const trackUniqueVisitor = async () => {
-      try {
-        const VISITED_KEY = 'niraj_unique_visitor_logged_v2';
-        const SAVED_COUNT_KEY = 'niraj_saved_unique_visitor_count_v2';
-        
-        const hasVisited = localStorage.getItem(VISITED_KEY);
-        
-        // High-uptime global CDN visitor counter API
-        const sitePath = 'https://nirajpawar-freelancer.netlify.app';
-        const url = `https://api.visitorbadge.io/api/visitors?path=${encodeURIComponent(sitePath)}`;
+      const VISITED_KEY = 'niraj_unique_device_visit_v3';
+      const COUNT_KEY = 'niraj_unique_visitor_count_v3';
 
-        if (!hasVisited) {
-          localStorage.setItem(VISITED_KEY, new Date().toISOString());
-        }
+      const hasVisited = localStorage.getItem(VISITED_KEY);
+      const existingCount = localStorage.getItem(COUNT_KEY);
+
+      // 🛑 STRICT UNIQUE LOCK: If THIS device already visited, DO NOT increment API!
+      if (hasVisited && existingCount) {
+        setUniqueVisitorCount(parseInt(existingCount, 10));
+        return;
+      }
+
+      try {
+        // Mark this device as visited BEFORE fetching to prevent race conditions
+        localStorage.setItem(VISITED_KEY, new Date().toISOString());
+
+        const sitePath = 'https://nirajpawar-freelancer.netlify.app/unique_v3';
+        const url = `https://api.visitorbadge.io/api/visitors?path=${encodeURIComponent(sitePath)}`;
 
         const response = await fetch(url);
         const svgText = await response.text();
@@ -33,16 +38,19 @@ export const Footer: React.FC = () => {
           const parsedNum = parseInt(rawNum, 10);
           if (!isNaN(parsedNum) && parsedNum > 0) {
             setUniqueVisitorCount(parsedNum);
-            localStorage.setItem(SAVED_COUNT_KEY, parsedNum.toString());
+            localStorage.setItem(COUNT_KEY, parsedNum.toString());
             return;
           }
         }
 
-        const fallback = localStorage.getItem(SAVED_COUNT_KEY);
-        setUniqueVisitorCount(fallback ? parseInt(fallback, 10) : 1);
+        const prev = existingCount ? parseInt(existingCount, 10) : 0;
+        const nextCount = prev + 1;
+        setUniqueVisitorCount(nextCount);
+        localStorage.setItem(COUNT_KEY, nextCount.toString());
       } catch (err) {
-        const fallback = localStorage.getItem('niraj_saved_unique_visitor_count_v2');
-        setUniqueVisitorCount(fallback ? parseInt(fallback, 10) : 1);
+        const prev = existingCount ? parseInt(existingCount, 10) : 1;
+        setUniqueVisitorCount(prev);
+        localStorage.setItem(COUNT_KEY, prev.toString());
       }
     };
 
