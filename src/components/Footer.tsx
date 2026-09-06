@@ -4,36 +4,45 @@ import { CONTACT_CONFIG } from '../config/contact';
 import { GithubIcon, LinkedinIcon, UpworkIcon, KaggleIcon } from './UI/SocialIcons';
 
 export const Footer: React.FC = () => {
-  const [uniqueVisitorCount, setUniqueVisitorCount] = useState<number | null>(0);
+  const [uniqueVisitorCount, setUniqueVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
     const trackUniqueVisitor = async () => {
       try {
-        const STORAGE_KEY = 'niraj_unique_visitor_v0';
-        const hasVisited = localStorage.getItem(STORAGE_KEY);
+        const VISITED_KEY = 'niraj_unique_visitor_logged_v2';
+        const SAVED_COUNT_KEY = 'niraj_saved_unique_visitor_count_v2';
         
-        // CounterAPI unique namespace starting at 0
-        const namespace = 'nirajpawar_portfolio_v0';
-        const key = 'unique_count';
+        const hasVisited = localStorage.getItem(VISITED_KEY);
         
-        let endpoint = `https://api.counterapi.dev/v1/${namespace}/${key}`;
-        
+        // High-uptime global CDN visitor counter API
+        const sitePath = 'https://nirajpawar-freelancer.netlify.app';
+        const url = `https://api.visitorbadge.io/api/visitors?path=${encodeURIComponent(sitePath)}`;
+
         if (!hasVisited) {
-          // Increment unique visitor count
-          endpoint = `https://api.counterapi.dev/v1/${namespace}/${key}/up`;
-          localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+          localStorage.setItem(VISITED_KEY, new Date().toISOString());
         }
-        
-        const response = await fetch(endpoint);
-        const data = await response.json();
-        
-        if (data && typeof data.count === 'number') {
-          setUniqueVisitorCount(data.count);
-        } else {
-          setUniqueVisitorCount(hasVisited ? 1 : 0);
+
+        const response = await fetch(url);
+        const svgText = await response.text();
+
+        // Extract count from SVG badge markup
+        const matches = svgText.match(/>([\d,]+)</g);
+        if (matches && matches.length > 0) {
+          const lastMatch = matches[matches.length - 1];
+          const rawNum = lastMatch.replace(/[^\d]/g, '');
+          const parsedNum = parseInt(rawNum, 10);
+          if (!isNaN(parsedNum) && parsedNum > 0) {
+            setUniqueVisitorCount(parsedNum);
+            localStorage.setItem(SAVED_COUNT_KEY, parsedNum.toString());
+            return;
+          }
         }
+
+        const fallback = localStorage.getItem(SAVED_COUNT_KEY);
+        setUniqueVisitorCount(fallback ? parseInt(fallback, 10) : 1);
       } catch (err) {
-        setUniqueVisitorCount(0);
+        const fallback = localStorage.getItem('niraj_saved_unique_visitor_count_v2');
+        setUniqueVisitorCount(fallback ? parseInt(fallback, 10) : 1);
       }
     };
 
@@ -155,7 +164,7 @@ export const Footer: React.FC = () => {
             <Users className="w-3.5 h-3.5 text-brand-400" />
             <span>Unique Visitors:</span>
             <span className="font-bold text-white font-mono bg-brand-500/20 px-2 py-0.5 rounded-md text-brand-300 border border-brand-500/30">
-              {uniqueVisitorCount !== null ? uniqueVisitorCount.toLocaleString() : '0'}
+              {uniqueVisitorCount !== null ? uniqueVisitorCount.toLocaleString() : '1'}
             </span>
           </div>
         </div>
